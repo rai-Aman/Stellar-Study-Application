@@ -6,39 +6,53 @@ import 'user.dart';
 
 // ignore: camel_case_types
 class connectionDB {
-  void main(List<TextEditingController> userData) async {
+  bool userselected = false;
+
+  Future<Database> getDatabase() async {
+    // Get a reference to the database
+    var db = await openDatabase('databaseHelper.db');
+    return db;
+  }
+
+  void registerUser(List<TextEditingController> userData) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     // Opening the database and storing the reference.
-    final database = openDatabase(
-      join(await getDatabasesPath(), 'my_database.db'),
-    );
+    // final database = openDatabase(
+    //   join(await getDatabasesPath(), 'databaseHelper.db'),
+    // );
 
     // Get a reference to the database
-    final Database db = await database;
+    final Database db = await getDatabase();
+    // Define a function to delete a table from the database
+    // Future<void> deleteTable(String tableName) async {
+    //   // Execute a DROP TABLE statement to delete the table
+    //   await db.execute('DROP TABLE IF EXISTS $tableName');
+    // }
 
-    Future<void> createUsersTable(Database db) async {
-      await db.execute('''
-      CREATE TABLE IF NOT EXISTS users(
-        userId INTEGER PRIMARY KEY,
-        fullName TEXT,
-        email TEXT UNIQUE,
-        dob TEXT,
-        weight REAL,
-        height REAL
-      )
-    ''');
-    }
+    // Delete the users table from the database
+    //await deleteTable('users');
+
+    // Future<void> createUsersTable(Database db) async {
+    //   await db.execute('''
+    //   CREATE TABLE IF NOT EXISTS users(
+    //     userId INTEGER PRIMARY KEY,
+    //     fullName TEXT,
+    //     email TEXT UNIQUE,
+    //     password TEXT
+    //   )
+    // ''');
+    // }
 
     //creates a user table
-    await createUsersTable(db);
+    //await createUsersTable(db);
 
     // Define a function to insert a user into the database
     Future<void> insertUser(User user) async {
       // Insert the user into the users table
       try {
         await db.insert(
-          'users',
+          'user',
           user.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
@@ -50,7 +64,6 @@ class connectionDB {
 
     // Create a new user
     final newUser = User(
-        userId: 1,
         fullName: userData[0].text,
         email: userData[1].text,
         password: userData[2].text);
@@ -58,10 +71,10 @@ class connectionDB {
     // Insert the new user into the database
     await insertUser(newUser);
 
-    //fetching inserted user data
+    // //fetching inserted user data
     Future<List<User>> getUsers() async {
       // Query the users table
-      final List<Map<String, dynamic>> maps = await db.query('users');
+      final List<Map<String, dynamic>> maps = await db.query('user');
 
       // Convert the List<Map<String, dynamic>> into a List<User>
       return List.generate(maps.length, (i) {
@@ -69,35 +82,47 @@ class connectionDB {
       });
     }
 
-    // Retrieve all users from the database
+    // // Retrieve all users from the database
     final users = await getUsers();
 
-    // Print the list of users
+    // // Print the list of users
     print(users.toString());
 
-    // // Define a function to delete a table from the database
-    // Future<void> deleteTable(String tableName) async {
-    //   // Execute a DROP TABLE statement to delete the table
-    //   await db.execute('DROP TABLE IF EXISTS $tableName');
+    // //FOR TABLES LIST
+    // Future<List<String>> getTables() async {
+    //   // Query the sqlite_master table to get a list of all tables
+    //   final List<Map<String, dynamic>> result = await db
+    //       .rawQuery('SELECT name FROM sqlite_master WHERE type="table"');
+
+    //   // Convert the result into a List<String>
+    //   return result.map((row) => row['name'] as String).toList();
     // }
 
-    // // Delete the users table from the database
-    // await deleteTable('users');
+    // // Get a list of all tables in the database
+    // final tables = await getTables();
 
-    //FOR TABLES LIST
-    Future<List<String>> getTables() async {
-      // Query the sqlite_master table to get a list of all tables
-      final List<Map<String, dynamic>> result = await db
-          .rawQuery('SELECT name FROM sqlite_master WHERE type="table"');
+    // // Print the list of tables
+    // print('List of tables: $tables');
+  }
 
-      // Convert the result into a List<String>
-      return result.map((row) => row['name'] as String).toList();
+  void loginValidation(String email, String password) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final Database db = await getDatabase();
+
+    // Query the users table
+    final List<Map<String, dynamic>> maps = await db.query(
+      'user',
+      columns: ['User_Id'],
+      where: 'Email = ? AND Password = ?',
+      whereArgs: [email, password],
+    );
+
+    if (maps.isNotEmpty) {
+      userselected = true;
     }
-
-    // Get a list of all tables in the database
-    final tables = await getTables();
-
-    // Print the list of tables
-    print('List of tables: $tables');
+    // Convert the List<Map<String, dynamic>> into a List<User>
+    // return List.generate(maps.length, (i) {
+    //   return User.fromMap(maps[i]);
+    // });
   }
 }

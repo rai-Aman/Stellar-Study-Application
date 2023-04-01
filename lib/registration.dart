@@ -14,8 +14,8 @@ class MyRegistration extends StatefulWidget {
 class _MyRegistrationState extends State<MyRegistration> {
   final formKey = GlobalKey<FormState>(); //key for form
   //Create a TextEditingController object:
-  final List<TextEditingController> _userData =
-      List.generate(5, (_) => TextEditingController());
+  final List<TextEditingController> _userData = List.generate(
+      5, (_) => TextEditingController()); //List to store user data
 
   bool _obscureText = true;
   String? _password;
@@ -166,7 +166,7 @@ class _MyRegistrationState extends State<MyRegistration> {
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           // The form is valid. Do something here, like logging in the user.
-                          connectionDB().main(_userData);
+                          connectionDB().registerUser(_userData);
                         }
                       },
                       child: const Text('Create'),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:production_project_application/databaseHelper/connectionDB.dart';
+import 'package:production_project_application/stellarHome.dart';
 import 'functions.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
@@ -10,23 +12,14 @@ class MyLogin extends StatefulWidget {
 }
 
 class _MyLoginState extends State<MyLogin> with SingleTickerProviderStateMixin {
+  connectionDB db = connectionDB();
+  TextEditingController emailController = TextEditingController(),
+      passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>(); //key for form
   bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.grey[800],
-      //   elevation: 0,
-      //   title: const Text(
-      //     'Stellar Study',
-      //     style: TextStyle(
-      //       color: Color.fromRGBO(252, 250, 250, 1),
-      //       fontSize: 24,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -83,6 +76,7 @@ class _MyLoginState extends State<MyLogin> with SingleTickerProviderStateMixin {
                     ),
                     const SizedBox(height: 30),
                     TextFormField(
+                      controller: emailController,
                       decoration: const InputDecoration(
                         hintText: 'Enter your email',
                       ),
@@ -93,6 +87,7 @@ class _MyLoginState extends State<MyLogin> with SingleTickerProviderStateMixin {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      controller: passwordController,
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         hintText: 'Password',
@@ -117,10 +112,28 @@ class _MyLoginState extends State<MyLogin> with SingleTickerProviderStateMixin {
                       },
                     ),
                     const SizedBox(height: 20),
+                    Opacity(
+                      opacity: db.userselected ? 1.0 : 0.0,
+                      child: const Text(
+                        'Invalid credentials',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           // The form is valid. Do something here, like logging in the user.
+                          db.loginValidation(emailController.toString(),
+                              passwordController.toString());
+                          if (db.userselected) {
+                            db.userselected = false;
+                            Navigator.pushNamed(context, 'stellarHome');
+                          } else {
+                            setState(() {
+                              db.userselected = true;
+                            });
+                          }
                         }
                       },
                       child: const Text('Login'),

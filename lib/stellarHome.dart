@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class MyStellarHome extends StatefulWidget {
   const MyStellarHome({Key? key}) : super(key: key);
-
   @override
   State<MyStellarHome> createState() => _MyStellarHomeState();
 }
@@ -178,7 +177,38 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                         ],
                       );
                     },
-                  )
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'Courses',
+                        style: TextStyle(
+                            fontSize: 23, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        'See All',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromARGB(255, 38, 2, 56),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  // GridView.builder(
+                  //   shrinkWrap: true,
+                  //   physics: NeverScrollableScrollPhysics(),
+                  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //       crossAxisCount: 2,
+                  //       childAspectRatio:
+                  //           (MediaQuery.of(context).size.height - 50 - 25) /
+                  //               (4 * 240),
+                  //       mainAxisSpacing: 10,
+                  //       crossAxisSpacing: 10,
+                  //     ),
+                  //    )   // itemBuilder: itemBuilder)
                 ],
               )),
         ],
