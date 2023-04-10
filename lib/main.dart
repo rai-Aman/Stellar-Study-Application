@@ -7,7 +7,7 @@ import 'otp.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: 'login',
+    initialRoute: 'stellarHome',
     routes: {
       'login': (context) => const MyLogin(),
       'register': (context) => const MyRegistration(),

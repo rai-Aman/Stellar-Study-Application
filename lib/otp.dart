@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'constants/colors.dart';
 
 class MyOtp extends StatefulWidget {
   const MyOtp({Key? key}) : super(key: key);
@@ -9,131 +8,98 @@ class MyOtp extends StatefulWidget {
 }
 
 class _MyOtpState extends State<MyOtp> {
-  final TextEditingController _otpController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.requestFocus();
-  }
+  final List<TextEditingController> _controllers =
+      List.generate(4, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
 
   @override
   void dispose() {
-    _otpController.dispose();
-    _focusNode.dispose();
+    _controllers.forEach((controller) => controller.dispose());
+    _focusNodes.forEach((focusNode) => focusNode.dispose());
     super.dispose();
-  }
-
-  Widget _buildOtpInput() {
-    return TextFormField(
-      controller: _otpController,
-      focusNode: _focusNode,
-      keyboardType: TextInputType.number,
-      maxLength: 6,
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-      ),
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-        counterText: '',
-        hintText: 'Enter OTP',
-        hintStyle: TextStyle(
-          color: Color.fromARGB(255, 38, 2, 56),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildResendOtp() {
-    return TextButton(
-      onPressed: () {},
-      child: const Text(
-        'Resend OTP',
-        style: TextStyle(
-          color: catColor3,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildVerifyButton() {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 38, 2, 56),
-        minimumSize: Size(MediaQuery.of(context).size.width - 80, 60),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-      ),
-      child: const Text(
-        'VERIFY',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: catColor6,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
-              const Text(
-                'Enter OTP',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 20),
-              const Text(
-                'A One Time Password (OTP) has been sent to your registered mobile number',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 40),
-              _buildOtpInput(),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Didn\'t receive OTP? ',
-                    style: TextStyle(
-                      color: catColor3,
-                      fontSize: 16,
+      appBar: AppBar(
+        title: const Text('OTP Verification'),
+        backgroundColor: const Color.fromARGB(255, 38, 2, 56),
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Enter the verification code sent to your mail.',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            const SizedBox(height: 32.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(4, (index) {
+                return SizedBox(
+                  width: 60,
+                  child: TextField(
+                    controller: _controllers[index],
+                    focusNode: _focusNodes[index],
+                    keyboardType: TextInputType.number,
+                    maxLength: 1,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 38, 2, 56),
                     ),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
+                      counterText: '',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xffBDBDBD),
+                          width: 2.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(
+                          color: Colors.orangeAccent,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        if (index < _controllers.length - 1) {
+                          _focusNodes[index + 1].requestFocus();
+                        } else {
+                          // Hide the keyboard
+                          _focusNodes[index].unfocus();
+                        }
+                      } else {
+                        if (index > 0) {
+                          _focusNodes[index - 1].requestFocus();
+                        }
+                      }
+                    },
                   ),
-                  _buildResendOtp(),
-                ],
+                );
+              }),
+            ),
+            const SizedBox(height: 32.0),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 38, 2, 56),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
-              const Spacer(),
-              _buildVerifyButton(),
-              const SizedBox(height: 20),
-            ],
-          ),
+              child: const Text('Verify'),
+            ),
+          ],
         ),
       ),
     );

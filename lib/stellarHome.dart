@@ -35,6 +35,12 @@ class _MyStellarHomeState extends State<MyStellarHome> {
     const Icon(Icons.podcasts, color: Colors.white, size: 30),
     const Icon(Icons.leaderboard, color: Colors.white, size: 30),
   ];
+  List courseListImages = [
+    'Astro Introductory',
+    'Planetary Science',
+    'Astrobiology',
+    'Space Technology'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -139,20 +145,26 @@ class _MyStellarHomeState extends State<MyStellarHome> {
             ),
           ),
           Padding(
-              padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-              child: Column(
-                children: [
-                  GridView.builder(
-                    itemCount: chooseCategory.length, //for looping icons
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, childAspectRatio: 1.1),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
+            padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+            child: Column(
+              children: [
+                GridView.builder(
+                  itemCount: chooseCategory.length, //for looping icons
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, childAspectRatio: 1.1),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            // TODO: Add your onTap logic here
+                          },
+                          splashColor: const Color.fromARGB(255, 22, 22, 22),
+                          highlightColor: const Color.fromARGB(255, 22, 22, 22),
+                          borderRadius: BorderRadius.circular(30),
+                          child: Container(
                             height: 60,
                             width: 60,
                             decoration: BoxDecoration(
@@ -163,30 +175,42 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                               child: categoryIcon[index],
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          chooseCategory[index],
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
                           ),
-                          Text(
-                            chooseCategory[index],
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black.withOpacity(0.7),
-                            ),
-                          )
-                        ],
-                      );
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
+                        )
+                      ],
+                    );
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        // TODO: Add your onPressed logic here
+                      },
+                      child: const Text(
                         'Courses',
                         style: TextStyle(
-                            fontSize: 23, fontWeight: FontWeight.w600),
+                            fontSize: 23,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
                       ),
-                      Text(
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // TODO: Add your onPressed logic here
+                      },
+                      child: const Text(
                         'See All',
                         style: TextStyle(
                           fontSize: 18,
@@ -194,23 +218,107 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                           color: Color.fromARGB(255, 38, 2, 56),
                         ),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                GridView.builder(
+                  itemCount: courseListImages.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio:
+                        (MediaQuery.of(context).size.height - 50 - 25) /
+                            (4 * 240),
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
                   ),
-                  const SizedBox(height: 10),
-                  // GridView.builder(
-                  //   shrinkWrap: true,
-                  //   physics: NeverScrollableScrollPhysics(),
-                  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: 2,
-                  //       childAspectRatio:
-                  //           (MediaQuery.of(context).size.height - 50 - 25) /
-                  //               (4 * 240),
-                  //       mainAxisSpacing: 10,
-                  //       crossAxisSpacing: 10,
-                  //     ),
-                  //    )   // itemBuilder: itemBuilder)
-                ],
-              )),
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        // TODO: Add your onTap logic here
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Color.fromARGB(255, 195, 192, 192),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            // TODO: Add your onTap logic here
+                          },
+                          splashColor: Colors.grey,
+                          highlightColor: const Color.fromARGB(255, 22, 22, 22),
+                          borderRadius:
+                              BorderRadius.circular(30), // Set the splash color
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                      "courseImages/${courseListImages[index]}.png",
+                                      fit: BoxFit.cover,
+                                      // width: 100,
+                                      // height: 100,
+                                      scale: 4),
+                                ),
+                              ),
+                              //const SizedBox(height: 5),
+                              // TextButton(
+                              //   onPressed: () {
+                              //     // TODO: Add your onPressed logic here
+                              //   },
+                              Text(
+                                courseListImages[index],
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black.withOpacity(0.6)),
+                              ),
+                              // ),
+                              //const SizedBox(height: 10),
+                              TextButton(
+                                onPressed: () {
+                                  // TODO: Add your onPressed logic here
+                                },
+                                child: Text(
+                                  '8 Videos',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        iconSize: 32,
+        selectedItemColor: const Color(0xccc04327),
+        selectedFontSize: 18,
+        unselectedItemColor: Colors.black,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.question_answer), label: 'Quiz'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: 'Wishlist'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
