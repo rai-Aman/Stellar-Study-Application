@@ -60,12 +60,12 @@ class _MyStellarHomeState extends State<MyStellarHome> {
             MaterialPageRoute(builder: (context) => const MyStellarHome()),
           );
           break;
-        case 1:
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MyQuiz()),
-          );
-          break;
+        // case 1:
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (context) => const MyQuiz()),
+        //   );
+        //   break;
         // case 2:
         //   Navigator.push(
         //     context,
@@ -242,6 +242,23 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                           InkWell(
                             onTap: () {
                               // TODO: Add your onTap logic here
+                              String route = '';
+                              if (chooseCategory[index] == 'Category') {
+                                route = '/category';
+                              } else if (chooseCategory[index] == 'Courses') {
+                                route = '/courses';
+                              } else if (chooseCategory[index] == 'Books') {
+                                route = '/books';
+                              } else if (chooseCategory[index] == 'Videos') {
+                                route = '/videos';
+                              } else if (chooseCategory[index] == 'Podcasts') {
+                                route = '/podcasts';
+                              } else if (chooseCategory[index] ==
+                                  'Leaderboard') {
+                                route = 'leaderboard';
+                              }
+                              Navigator.pushNamed(context, route);
+                              
                             },
                             splashColor: const Color.fromARGB(255, 22, 22, 22),
                             highlightColor:
