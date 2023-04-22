@@ -1,9 +1,12 @@
 // ignore: file_names
+import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'bottomNavigationPages/QuizPage.dart';
 import 'coursePages/coursesHome.dart';
+import 'package:http/http.dart' as http;
 
 class MyStellarHome extends StatefulWidget {
   const MyStellarHome({Key? key}) : super(key: key);
@@ -12,6 +15,36 @@ class MyStellarHome extends StatefulWidget {
 }
 
 class _MyStellarHomeState extends State<MyStellarHome> {
+  String _title = '';
+  String _imageUrl = '';
+  String _date = '';
+  String _explanation = '';
+  @override
+  void initState() {
+    super.initState();
+    _getApod();
+  }
+
+  Future<void> _getApod() async {
+    final response = await http.get(
+      Uri.parse(
+          'https://api.nasa.gov/planetary/apod?api_key=cHy2JPNqqPZfDenVmFYxod8Kt04KMxuYKhkk5dbH'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        _title = data['title'];
+        _imageUrl = data['url'];
+        _date = data['date'];
+        _explanation = data['explanation'];
+      });
+    } else {
+      // Handle error
+      throw Exception('Failed to fetch photo of the day');
+    }
+  }
+
   //making category list for user
   List chooseCategory = [
     'Category',
@@ -258,7 +291,6 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                                 route = 'leaderboard';
                               }
                               Navigator.pushNamed(context, route);
-                              
                             },
                             splashColor: const Color.fromARGB(255, 22, 22, 22),
                             highlightColor:
@@ -294,18 +326,18 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          // TODO: Add your onPressed logic here
-                        },
-                        child: const Text(
-                          'Courses',
-                          style: TextStyle(
-                              fontSize: 23,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     // TODO: Add your onPressed logic here
+                      //   },
+                      const Text(
+                        'Choose Your Course',
+                        style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
                       ),
+
                       TextButton(
                         onPressed: () {
                           // TODO: Add your onPressed logic here
@@ -322,85 +354,152 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  GridView.builder(
-                    itemCount: courseListImages.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio:
-                          (MediaQuery.of(context).size.height - 50 - 25) /
-                              (4 * 240),
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
+                  //SingleChildScrollView(
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      height: 220, // reduce the height
+                      autoPlay: true,
+                      autoPlayInterval:
+                          const Duration(seconds: 2), // increase the interval
+
+                      enlargeCenterPage: false,
+                      viewportFraction: 0.6,
+                      aspectRatio: 1,
                     ),
-                    itemBuilder: (context, index) {
+                    items: courseListImages.map((imageName) {
                       return InkWell(
                         onTap: () {
                           // TODO: Add your onTap logic here
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    coursesHome(courseListImages[index]),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => coursesHome(imageName),
+                            ),
+                          );
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: const Color(0xbbb5bec7),
+                            color: Color.fromARGB(184, 252, 251, 251),
                           ),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset(
-                                      "courseImages/${courseListImages[index]}.png",
-                                      fit: BoxFit.cover,
-                                      // width: 100,
-                                      // height: 100,
-                                      scale: 1),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  "courseImages/$imageName.png",
+                                  fit: BoxFit.cover,
+                                  // width: 100,
+                                  // height: 100,
+                                  scale: 1,
                                 ),
                               ),
-                              //const SizedBox(height: 5),
-                              // TextButton(
-                              //   onPressed: () {
-                              //     // TODO: Add your onPressed logic here
-                              //   },
-                              Text(
-                                courseListImages[index],
-                                style: TextStyle(
+                              const SizedBox(height: 10),
+                              // Padding(
+                              //   padding: const EdgeInsets.symmetric(
+                              //       horizontal: 10),
+                              Container(
+                                width: 2,
+                                height: 30,
+                                margin:
+                                    const EdgeInsets.only(right: 30, left: 30),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: const Color.fromARGB(255, 38, 2, 56),
+                                ),
+                                child: Text(
+                                  imageName,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.black.withOpacity(0.6)),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              //),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Photo of the Day from NASA",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Image.network(
+                            _imageUrl,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _title,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               const SizedBox(height: 5),
-
-                              // ),
-                              //const SizedBox(height: 10),
-                              // TextButton(
-                              //   onPressed: () {
-                              //     // TODO: Add your onPressed logic here
-                              //   },
+                              Text(
+                                _date,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
                               const SizedBox(height: 10),
                               Text(
-                                '8 Videos',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black.withOpacity(0.5),
+                                _explanation,
+                                style: const TextStyle(
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
+
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
