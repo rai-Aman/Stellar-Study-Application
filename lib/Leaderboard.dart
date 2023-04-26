@@ -14,17 +14,17 @@ class _MyLeaderboardState extends State<MyLeaderboard> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 249, 247, 247),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 38, 2, 56),
-        foregroundColor: Colors.white,
-        elevation: 0,
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white, elevation: 0,
         centerTitle: true,
         title: const Flexible(
           child: Text(
             'LEADERBOARD',
             style: TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 38, 2, 56),
               fontFamily: 'Courier New',
               fontSize: 20,
+              letterSpacing: 1,
               fontWeight: FontWeight.bold,
             ),
           ),

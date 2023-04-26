@@ -1,4 +1,95 @@
 //Email Validation
+import 'package:flutter/material.dart';
+
+import 'stellarHome.dart';
+import 'bottomNavigationPages/myProfile.dart';
+import 'bottomNavigationPages/quizPage.dart';
+
+// void onItemTapped(BuildContext context, int selectedIndex, int index) {
+//   //Conditions if the user has tapped on the same item and no action should be taken.
+//   if (index != selectedIndex) {
+//     switch (index) {
+//       case 0:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (context) => const MyStellarHome()),
+//         );
+//         break;
+//       case 1:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (context) => const MyQuiz()),
+//         );
+//         break;
+//       // case 2:
+//       //   Navigator.push(
+//       //     context,
+//       //     MaterialPageRoute(builder: (context) => RecommendationPage()),
+//       //   );
+//       //   break;
+//       case 3:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (context) => const myProfile()),
+//         );
+//         break;
+//     }
+//   }
+// }
+
+// BottomNavigationBar buildBottomNavigationBar({
+//   required int selectedIndex,
+//   required void Function(int) onItemTapped,
+// }) {
+//   return BottomNavigationBar(
+//     onTap: onItemTapped,
+//     currentIndex: selectedIndex,
+//     iconSize: 24,
+//     selectedItemColor: const Color(0xccc04327),
+//     selectedFontSize: 14,
+//     unselectedItemColor: Colors.black,
+//     items: const [
+//       BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+//       BottomNavigationBarItem(icon: Icon(Icons.quiz_rounded), label: 'Quiz'),
+//       BottomNavigationBarItem(
+//           icon: Icon(Icons.recommend), label: 'Recommendation'),
+//       BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+//     ],
+//   );
+// }
+
+Widget buildBottomNavigationBar(int currentIndex, void Function(int)? onTap) {
+  return Theme(
+    data: ThemeData(
+      canvasColor: const Color.fromARGB(255, 38, 2, 56),
+    ),
+    child: BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: onTap,
+      selectedItemColor: const Color(0xffE38763),
+      unselectedItemColor: Colors.white,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.recommend),
+          label: 'Recommendations',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.quiz_rounded),
+          label: 'Quiz',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ],
+    ),
+  );
+}
+
 String? validateEmail(String? email) {
   if (email == null || email.isEmpty) {
     return 'Please enter your email';
@@ -44,5 +135,3 @@ String? validatePassword(String? value, String? confirmPassword) {
   }
   return null;
 }
-
-

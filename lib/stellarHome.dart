@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'bottomNavigationPages/QuizPage.dart';
+import 'bottomNavigationPages/myProfile.dart';
 import 'coursePages/coursesHome.dart';
 import 'package:http/http.dart' as http;
+
+import 'functions.dart';
 
 class MyStellarHome extends StatefulWidget {
   const MyStellarHome({Key? key}) : super(key: key);
@@ -15,10 +17,12 @@ class MyStellarHome extends StatefulWidget {
 }
 
 class _MyStellarHomeState extends State<MyStellarHome> {
+  final ValueNotifier<int> _currentNotifier = ValueNotifier<int>(0);
   String _title = '';
   String _imageUrl = '';
   String _date = '';
   String _explanation = '';
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +34,6 @@ class _MyStellarHomeState extends State<MyStellarHome> {
       Uri.parse(
           'https://api.nasa.gov/planetary/apod?api_key=cHy2JPNqqPZfDenVmFYxod8Kt04KMxuYKhkk5dbH'),
     );
-
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -78,14 +81,12 @@ class _MyStellarHomeState extends State<MyStellarHome> {
     'Space Technology'
   ];
 
-  int _selectedIndex = 0;
+  int _currentIndex = 0;
   void _onItemTapped(int index) {
-    //Conditions if the user has tapped on the same item and no action should be taken.
-    if (index != _selectedIndex) {
+    if (index != _currentIndex) {
       setState(() {
-        _selectedIndex = index;
+        _currentIndex = index;
       });
-
       switch (index) {
         case 0:
           Navigator.push(
@@ -96,21 +97,21 @@ class _MyStellarHomeState extends State<MyStellarHome> {
         // case 1:
         //   Navigator.push(
         //     context,
-        //     MaterialPageRoute(builder: (context) => const MyQuiz()),
-        //   );
-        //   break;
-        // case 2:
-        //   Navigator.push(
-        //     context,
         //     MaterialPageRoute(builder: (context) => RecommendationPage()),
         //   );
         //   break;
-        // case 3:
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => ProfilePage()),
-        //   );
-        // break;
+        case 2:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MyQuiz()),
+          );
+          break;
+        case 3:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const myProfile()),
+          );
+          break;
       }
     }
   }
@@ -285,7 +286,7 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                               } else if (chooseCategory[index] == 'Videos') {
                                 route = '/videos';
                               } else if (chooseCategory[index] == 'Podcasts') {
-                                route = '/podcasts';
+                                route = 'podcast';
                               } else if (chooseCategory[index] ==
                                   'Leaderboard') {
                                 route = 'leaderboard';
@@ -357,19 +358,21 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                   //SingleChildScrollView(
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: 220, // reduce the height
+                      height: 220,
                       autoPlay: true,
-                      autoPlayInterval:
-                          const Duration(seconds: 2), // increase the interval
-
+                      autoPlayInterval: Duration(seconds: 2),
                       enlargeCenterPage: false,
                       viewportFraction: 0.6,
                       aspectRatio: 1,
+                      enableInfiniteScroll: true,
+                      onPageChanged: (index, reason) {
+                        _currentNotifier.value =
+                            index; // update the ValueNotifier
+                      },
                     ),
                     items: courseListImages.map((imageName) {
                       return InkWell(
                         onTap: () {
-                          // TODO: Add your onTap logic here
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -392,15 +395,10 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                                 child: Image.asset(
                                   "courseImages/$imageName.png",
                                   fit: BoxFit.cover,
-                                  // width: 100,
-                                  // height: 100,
                                   scale: 1,
                                 ),
                               ),
-                              const SizedBox(height: 10),
-                              // Padding(
-                              //   padding: const EdgeInsets.symmetric(
-                              //       horizontal: 10),
+                              SizedBox(height: 10),
                               Container(
                                 width: 2,
                                 height: 30,
@@ -421,14 +419,39 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                                   ),
                                 ),
                               ),
-                              //),
                             ],
                           ),
                         ),
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: courseListImages.map(
+                      (imageName) {
+                        int index = courseListImages.indexOf(imageName);
+                        return ValueListenableBuilder<int>(
+                          valueListenable: _currentNotifier,
+                          builder:
+                              (BuildContext context, int value, Widget? child) {
+                            return Container(
+                              width: 8,
+                              height: 8,
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: value == index
+                                    ? const Color.fromARGB(255, 38, 2, 56)
+                                    : const Color.fromARGB(100, 38, 2, 56),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ).toList(),
+                  ),
+                  const SizedBox(height: 30),
                   const Text(
                     "Photo of the Day from NASA",
                     style: TextStyle(
@@ -437,7 +460,6 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                       color: Colors.black,
                     ),
                   ),
-
                   const SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
@@ -455,14 +477,36 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          child: Image.network(
-                            _imageUrl,
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                        GestureDetector(
+                          onTap: () {
+                            if (_imageUrl.isNotEmpty) {
+                              showDialog(
+                                // Dialog to show bigger image as well.
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    child: Image.network(_imageUrl),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          child: ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            child: _imageUrl.isNotEmpty
+                                ? Image.network(
+                                    _imageUrl,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    "ImpImages/loading.gif",
+                                    height: 300,
+                                    width: 600,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                         Padding(
@@ -471,7 +515,7 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _title,
+                                _title, //Title of API Image
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -479,7 +523,7 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                _date,
+                                _date, //Date of API Image
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,
@@ -487,7 +531,7 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                _explanation,
+                                _explanation, //Explanation of API Image
                                 style: const TextStyle(
                                   fontSize: 16,
                                 ),
@@ -498,7 +542,6 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 10),
                 ],
               ),
@@ -507,22 +550,8 @@ class _MyStellarHomeState extends State<MyStellarHome> {
         ),
         //body: _pages[_selectedIndex],
 
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: _onItemTapped,
-          currentIndex: _selectedIndex,
-          iconSize: 24,
-          selectedItemColor: const Color(0xccc04327),
-          selectedFontSize: 14,
-          unselectedItemColor: Colors.black,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.quiz_rounded), label: 'Quiz'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.recommend), label: 'Recommendation'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ),
+        bottomNavigationBar:
+            buildBottomNavigationBar(_currentIndex, _onItemTapped),
       ),
     );
   }

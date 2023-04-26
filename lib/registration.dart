@@ -176,16 +176,17 @@ class _MyRegistrationState extends State<MyRegistration> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, 'login');
-                            },
-                            child: const Text(
-                              'Already have Account?',
-                              style: TextStyle(
-                                  decoration: null,
-                                  fontSize: 18,
-                                  color: Color.fromARGB(255, 112, 111, 109)),
-                            )),
+                          onPressed: () {
+                            Navigator.pushNamed(context, 'login');
+                          },
+                          child: const Text(
+                            'Already have Account?',
+                            style: TextStyle(
+                                decoration: null,
+                                fontSize: 18,
+                                color: Color.fromARGB(255, 112, 111, 109)),
+                          ),
+                        ),
                       ],
                     )
                   ],
