@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:production_project_application/bottomNavigationPages/recommendations.dart';
 import 'bottomNavigationPages/QuizPage.dart';
 import 'bottomNavigationPages/myProfile.dart';
 import 'coursePages/coursesHome.dart';
@@ -94,12 +95,12 @@ class _MyStellarHomeState extends State<MyStellarHome> {
             MaterialPageRoute(builder: (context) => const MyStellarHome()),
           );
           break;
-        // case 1:
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => RecommendationPage()),
-        //   );
-        //   break;
+        case 1:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const RecommendationPage()),
+          );
+          break;
         case 2:
           Navigator.push(
             context,

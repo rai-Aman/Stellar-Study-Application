@@ -11,7 +11,7 @@ class PodcastDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        backgroundColor: Color.fromARGB(255, 38, 2, 56),
+        backgroundColor: const Color.fromARGB(255, 38, 2, 56),
         elevation: 0,
         title: Text(podcast.title),
       ),
@@ -48,14 +48,19 @@ class PodcastDetailPage extends StatelessWidget {
                   const SizedBox(height: 36),
                   ElevatedButton(
                     onPressed: () async {
+                      /*The launch method attempts to open the specified URL using the appropriate app on the user’s device. For example, if the URL is a web address, it will open in the user’s default web browser.
+                      On the other hand, the canLaunch method checks if the specified URL can be handled by any app installed on the user’s device. It returns a Future that completes with a bool value indicating whether or not the URL can be launched.*/
+
+                      // ignore: deprecated_member_use
                       if (await canLaunch(podcast.link)) {
+                        // ignore: deprecated_member_use
                         await launch(podcast.link);
                       } else {
                         throw 'Could not launch ${podcast.link}';
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.white54,
                       padding:
                           EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                       shape: RoundedRectangleBorder(
@@ -77,6 +82,15 @@ class PodcastDetailPage extends StatelessWidget {
           const SizedBox(height: 16),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              podcast.title,
+              style: const TextStyle(
+                  fontSize: 28, fontWeight: FontWeight.bold, wordSpacing: 4),
+            ),
           ),
           const SizedBox(height: 16),
           Padding(

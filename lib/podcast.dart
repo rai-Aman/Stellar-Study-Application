@@ -16,8 +16,7 @@ class _PodcastsPageState extends State<PodcastsPage> {
       image: 'loginRegisterImages/fantasy.jpg',
       description:
           'The Joe Rogan Experience is a free audio and video podcast hosted by American comedian, actor, sports commentator, and television host Joe Rogan.',
-      link:
-          'https://www.youtube.com/watch?v=OWlKZ6C7cDY&list=RDMM&start_radio=1&rv=_fqpk3cXG-U',
+      link: 'https://theorbitalmechanics.com/',
     ),
     Podcast(
       title: 'Serial',
