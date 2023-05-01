@@ -1,5 +1,6 @@
 //Email Validation
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'stellarHome.dart';
 import 'bottomNavigationPages/myProfile.dart';
@@ -89,6 +90,49 @@ Widget buildBottomNavigationBar(int currentIndex, void Function(int)? onTap) {
     ),
   );
 }
+
+Future<bool> showExitDialog(BuildContext context) async {
+  final shouldPop = await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text(
+        'Stellar Study E-Learning',
+        style: TextStyle(
+          color: Color.fromARGB(255, 38, 2, 56),
+          decoration: TextDecoration.underline,
+          decorationThickness: 1,
+          decorationColor: Color.fromARGB(255, 38, 2, 56),
+        ),
+      ),
+      content: const Text('Are you sure you want to exit?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text(
+            'No',
+            style: TextStyle(
+              color: Color.fromARGB(255, 38, 2, 56),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(true);
+            SystemNavigator.pop();
+          },
+          child: const Text(
+            'Yes',
+            style: TextStyle(
+              color: Color.fromARGB(255, 38, 2, 56),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+  return shouldPop ?? false;
+}
+
 
 String? validateEmail(String? email) {
   if (email == null || email.isEmpty) {

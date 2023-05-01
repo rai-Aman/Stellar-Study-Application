@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -82,83 +83,10 @@ class _MyStellarHomeState extends State<MyStellarHome> {
     'Space Technology'
   ];
 
-  int _currentIndex = 0;
-  void _onItemTapped(int index) {
-    if (index != _currentIndex) {
-      setState(() {
-        _currentIndex = index;
-      });
-      switch (index) {
-        case 0:
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MyStellarHome()),
-          );
-          break;
-        case 1:
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const RecommendationPage()),
-          );
-          break;
-        case 2:
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MyQuiz()),
-          );
-          break;
-        case 3:
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const myProfile()),
-          );
-          break;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        final shouldPop = await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text(
-              'Stellar Study E-Learning',
-              style: TextStyle(
-                color: Color.fromARGB(255, 38, 2, 56),
-                decoration: TextDecoration.underline, // add underline
-                decorationThickness: 1, // underline thickness
-                decorationColor:
-                    Color.fromARGB(255, 38, 2, 56), // underline color
-              ),
-            ),
-            content: const Text('Are you sure you want to exit?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text(
-                  'No',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 38, 2, 56),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text(
-                  'Yes',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 38, 2, 56),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-        return shouldPop ?? false;
-      },
+      onWillPop: () => showExitDialog(context),
       child: Scaffold(
         body: ListView(
           children: [
@@ -283,7 +211,7 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                               } else if (chooseCategory[index] == 'Courses') {
                                 route = '/courses';
                               } else if (chooseCategory[index] == 'Books') {
-                                route = '/books';
+                                route = 'books';
                               } else if (chooseCategory[index] == 'Videos') {
                                 route = '/videos';
                               } else if (chooseCategory[index] == 'Podcasts') {
@@ -551,8 +479,8 @@ class _MyStellarHomeState extends State<MyStellarHome> {
         ),
         //body: _pages[_selectedIndex],
 
-        bottomNavigationBar:
-            buildBottomNavigationBar(_currentIndex, _onItemTapped),
+        // bottomNavigationBar:
+        //     buildBottomNavigationBar(_currentIndex, _onItemTapped),
       ),
     );
   }

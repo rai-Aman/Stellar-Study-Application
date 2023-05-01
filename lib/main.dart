@@ -7,6 +7,8 @@ import 'package:production_project_application/bottomNavigationPages/recommendat
 import 'package:production_project_application/podcast.dart';
 import 'package:production_project_application/registration.dart';
 import 'package:production_project_application/stellarHome.dart';
+import 'book.dart';
+import 'bottomNavigationPages/bottomNavBar.dart';
 import 'bottomNavigationPages/myProfile.dart';
 import 'login.dart';
 import 'otp.dart';
@@ -19,12 +21,13 @@ void main() {
       'login': (context) => const MyLogin(),
       'register': (context) => const MyRegistration(),
       'otp': (context) => const MyOtp(),
-      'stellarHome': (context) => const MyStellarHome(),
+      'stellarHome': (context) => const NavBar(),
       'quiz': (context) => const MyQuiz(),
       'leaderboard': (context) => MyLeaderboard(),
       'profile': (context) => const myProfile(),
       'podcast': (context) => const PodcastsPage(),
-      'recommendation':(context) =>  const RecommendationPage()
+      'recommendation': (context) => const RecommendationPage(),
+      'books': (context) => const BookPage()
     },
   ));
 }
