@@ -9,6 +9,8 @@ import 'bottomNavigationPages/QuizPage.dart';
 import 'bottomNavigationPages/myProfile.dart';
 import 'coursePages/coursesHome.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
 
 import 'functions.dart';
 
@@ -19,6 +21,14 @@ class MyStellarHome extends StatefulWidget {
 }
 
 class _MyStellarHomeState extends State<MyStellarHome> {
+  
+  List courseListImages = [
+    'Astro Introductory',
+    'Planetary Science',
+    'Astrobiology',
+    'Space Technology'
+  ];
+
   final ValueNotifier<int> _currentNotifier = ValueNotifier<int>(0);
   String _title = '';
   String _imageUrl = '';
@@ -75,12 +85,6 @@ class _MyStellarHomeState extends State<MyStellarHome> {
     const Icon(Icons.play_circle_fill, color: Colors.white, size: 30),
     const Icon(Icons.podcasts, color: Colors.white, size: 30),
     const Icon(Icons.leaderboard, color: Colors.white, size: 30),
-  ];
-  List courseListImages = [
-    'Astro Introductory',
-    'Planetary Science',
-    'Astrobiology',
-    'Space Technology'
   ];
 
   @override
@@ -209,7 +213,7 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                               if (chooseCategory[index] == 'Category') {
                                 route = '/category';
                               } else if (chooseCategory[index] == 'Courses') {
-                                route = '/courses';
+                                route = 'coursepage';
                               } else if (chooseCategory[index] == 'Books') {
                                 route = 'books';
                               } else if (chooseCategory[index] == 'Videos') {
@@ -271,6 +275,7 @@ class _MyStellarHomeState extends State<MyStellarHome> {
                       TextButton(
                         onPressed: () {
                           // TODO: Add your onPressed logic here
+                          Navigator.pushNamed(context, 'explore');
                         },
                         child: const Text(
                           'See All',

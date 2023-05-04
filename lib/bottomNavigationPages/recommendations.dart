@@ -8,7 +8,7 @@ class RecommendationPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             decoration: const BoxDecoration(
@@ -47,7 +47,7 @@ class RecommendationPage extends StatelessWidget {
               scrollDirection: Axis.vertical,
               child: Padding(
                 // Add this line
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
                     _buildRecommendationItem(
